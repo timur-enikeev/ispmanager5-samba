@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <mgrdata>
+     <handler name="samba.py" type="cgi">
+       <event after="yes" name="user.edit"/>
+       <event after="yes" name="user.delete"/>
+       <event after="yes" name="user.suspend"/>
+       <event after="yes" name="user.resume"/>
+       <event after="yes" name="ftp.user.suspend"/>
+       <event after="yes" name="ftp.user.resume"/>
+       <event after="yes" name="ftp.user.edit"/>
+       <event after="yes" name="ftp.user.delete"/>
+     </handler>
+
+   </mgrdata>
