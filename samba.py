@@ -4,7 +4,7 @@
 ENABLE_FTP=True  # Enable creating samba users for ftp accounts (only for ProFTPd). Disalbe this option if you use another FTP server!
 
 import logging, os, subprocess, sys, pwd, traceback, time
-logging.basicConfig(level=logging.ERROR) # , filename='/samba_addon.log')
+logging.basicConfig(level=logging.INFO) # , filename='/samba_addon.log')
 
 env = os.environ
 
@@ -103,7 +103,7 @@ def user_for_ftp():
             if not owner:
                 return 1
         if owner == ftpuser:
-            return 3
+            return 1
         owner_pwd = pwd.getpwnam(owner)
         uid = owner_pwd.pw_uid
         gid = owner_pwd.pw_gid
@@ -129,7 +129,9 @@ def del_system_user(ftpuser):
 
 def success():
     print """<?xml version="1.0" encoding="UTF-8"?>
-<doc/>"""
+<doc>
+</doc>
+"""
 
 def user_exists():
     print """<?xml version="1.0" encoding="UTF-8"?>
@@ -145,7 +147,7 @@ def other_error():
       <error />
     </doc>"""
 
-
+logging.info(str(env))
 try:
     if env['PARAM_func'] == 'user.delete' or (env['PARAM_func'] == 'ftp.user.delete' and ENABLE_FTP):
         delete()
@@ -159,10 +161,10 @@ try:
         success()
     elif not 'PARAM_sok' in env or not env['PARAM_sok']:
         success()
-    elif env['PARAM_func'] in ('user.add.finish', 'user.edit') and env['PARAM_passwd'] and env['PARAM_passwd'] == env['PARAM_confirm']:
+    elif env['PARAM_func'] in ('user.add.finish', 'user.edit') and env['PARAM_passwd']:
         create_or_edit()
         success()
-    elif ENABLE_FTP and env['PARAM_func'] == 'ftp.user.edit' and 'PARAM_sok' in env and env['PARAM_passwd'] and env['PARAM_passwd'] == env['PARAM_confirm']:
+    elif ENABLE_FTP and env['PARAM_func'] == 'ftp.user.edit' and 'PARAM_sok' in env and env['PARAM_passwd']:
         r = user_for_ftp()
         if r == 0:
             create_or_edit()
@@ -171,6 +173,7 @@ try:
             success()
         elif r == 3:
             user_exists()
+#            success()
         else:
             other_error()
     else:
@@ -183,3 +186,4 @@ except:
 
 
 logging.shutdown()
+
