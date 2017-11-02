@@ -2,6 +2,8 @@
 Plugin for creating Samba accounts for ISPManager 5 users
 
 Tested on Debian Jessie and ISPManager Lite
+## License
+GNU LGPL 2.1 or later.
 
 ## Installation
 
